@@ -44,55 +44,130 @@ Protected Class Class_Preference
 		  //---------------------------------------------------
 		  // FIND MMCTP Main folder
 		  //
-		  // A Alexander 2012
+		  // W Abdel-Rahman 2020
 		  // Update MsgBox for main folder location
+		  //
+		  //
 		  //-------------------------------------------------
-		  Dim fi,b,c as FolderItem
+		  
+		  //-------------------------------------------------
+		  Var MMCTP_Folder As FolderItem
 		  //---------------------------------------------------
 		  
-		  #if  TargetWindows Then
-		    fi=SpecialFolder.Applications
-		    b=fi.child("McGill Medical Physics")
-		    if b= nil Then
-		      MsgBox("MMCTP not installed. The folder called 'McGill Medical Physics' was not found within applications folder " +fi.name+ ". Nil object returned.")
+		  #If TargetWindows Then
+		    
+		    Var McGill_Folder as FolderItem = _
+		    SpecialFolder.Applications.child("McGill Medical Physics")
+		    
+		    If McGill_Folder Is Nil Then
+		      
+		      MsgBox("MMCTP not installed. The folder called 'McGill Medical Physics' was not found within applications folder " _
+		      + SpecialFolder.Applications.Name + ". Nil object returned.")
 		      Quit
-		    else
-		      c=b.Child("MMCTP")
-		      if c=nil Then
-		        MsgBox("MMCTP not installed. The folder called MMCTP was not found within applications folder " +b.name+ ". Nil object returned.")
-		        Quit
-		      else
-		        Return c
-		      end
-		    end
-		  #elseif TargetMacOS Then
+		      
+		    Else
+		      
+		      MMCTP_Folder = McGill_Folder.Child("MMCTP")
+		      
+		    End
 		    
-		    fi=SpecialFolder.Applications
-		     if fi =Nil then // added for MacOS 10.15 version
-		      fi=new FolderItem("/Applications")
-		    end
+		  #ElseIf TargetMacOS Then
 		    
-		    b=fi.child("MMCTP")
-		  #elseif TargetLinux Then
-		    fi=SpecialFolder.UserLibrary //2011 Linux UPDATE for MMCTP Install area
-		    b=fi.child("MMCTP")
-		  #else
+		    MMCTP_Folder = SpecialFolder.Applications.Child("MMCTP")
+		    
+		    If MMCTP_Folder Is Nil Then // added for MacOS 10.15 version
+		      
+		      MMCTP_Folder = New FolderItem("/Applications/MMCTP")
+		      
+		    End
+		    
+		  #ElseIf TargetLinux Then
+		    
+		    MMCTP_Folder = SpecialFolder.UserLibrary.Child("MMCTP")
+		    
+		  #Else
+		    
 		    MsgBox("OS not determined!")
 		    Quit
-		  #endif
+		    
+		  #EndIf
 		  
 		  
-		  if b=nil Then
-		    MsgBox("MMCTP not installed. The folder called MMCTP was not found within applications folder " +fi.name+ ". Nil object returned.")
+		  If MMCTP_Folder Is Nil Then
+		    
+		    MsgBox("MMCTP not installed. The folder called MMCTP was not found within applications folder " _
+		    + MMCTP_Folder.Parent.name + ". Nil object returned.")
 		    Quit
-		  end
+		    
+		  Else
+		    
+		    Return MMCTP_Folder
+		    
+		  End
 		  
-		  if b.Exists=False Then
-		    MsgBox("MMCTP not installed, app folder at location "+b.ShellPath+" does not exist")
-		    Quit
-		  else
-		    Return b
-		  end
+		  
+		  '
+		  'If b.Exists=False Then
+		  'MsgBox("MMCTP not installed, app folder at location "+b.ShellPath+" does not exist")
+		  'Quit
+		  'Else
+		  'Return b
+		  'End
+		  '
+		  
+		  
+		  //---------------------------------------------------
+		  // FIND MMCTP Main folder
+		  //
+		  // A Alexander 2012
+		  // Update MsgBox for main folder location
+		  '//-------------------------------------------------
+		  'Dim fi,b,c As FolderItem
+		  '//---------------------------------------------------
+		  '
+		  '#if  TargetWindows Then
+		  'fi=SpecialFolder.Applications
+		  'b=fi.child("McGill Medical Physics")
+		  'if b= nil Then
+		  'MsgBox("MMCTP not installed. The folder called 'McGill Medical Physics' was not found within applications folder " +fi.name+ ". Nil object returned.")
+		  'Quit
+		  'else
+		  'c=b.Child("MMCTP")
+		  'if c=nil Then
+		  'MsgBox("MMCTP not installed. The folder called MMCTP was not found within applications folder " +b.name+ ". Nil object returned.")
+		  'Quit
+		  'else
+		  'Return c
+		  'end
+		  'end
+		  '#elseif TargetMacOS Then
+		  '
+		  'fi=SpecialFolder.Applications
+		  'if fi =Nil then // added for MacOS 10.15 version
+		  'fi=new FolderItem("/Applications")
+		  'end
+		  '
+		  'b=fi.child("MMCTP")
+		  '#elseif TargetLinux Then
+		  'fi=SpecialFolder.UserLibrary //2011 Linux UPDATE for MMCTP Install area
+		  'b=fi.child("MMCTP")
+		  '#else
+		  'MsgBox("OS not determined!")
+		  'Quit
+		  '#endif
+		  '
+		  '
+		  'if b=nil Then
+		  'MsgBox("MMCTP not installed. The folder called MMCTP was not found within applications folder " +fi.name+ ". Nil object returned.")
+		  'Quit
+		  'end
+		  '
+		  'if b.Exists=False Then
+		  'MsgBox("MMCTP not installed, app folder at location "+b.ShellPath+" does not exist")
+		  'Quit
+		  'else
+		  'Return b
+		  'end
 		End Function
 	#tag EndMethod
 
